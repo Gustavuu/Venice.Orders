@@ -16,6 +16,7 @@ Gustavo Irentti
 -   **Padrões e Bibliotecas:** MediatR, xUnit, Moq, Shouldly
 -   **Segurança:** JSON Web Tokens (JWT)
 
+.
 ## ✅ Requisitos Atendidos
 
 - **Endpoint POST para criação de pedido:** `POST /api/Pedidos`
@@ -28,6 +29,7 @@ Gustavo Irentti
 - **Autenticação:** Os endpoints de `Pedidos` são protegidos via token JWT.
 - **Docker:** Um arquivo `docker-compose.yml` orquestra toda a aplicação e seus serviços.
 
+.
 ## 🏛️ Decisões de Arquitetura e Design
 
 ### Clean Architecture
@@ -54,15 +56,22 @@ O framework **MediatR** foi utilizado como uma implementação do padrão Mediat
 -   **SQL Server - Relacional:** Armazena os dados principais e transacionais do pedido (cabeçalho), que possuem uma estrutura bem definida.
 -   **MongoDB - Não relacional:** Armazena a lista de itens do pedido em um banco de dados orientado a documentos.
 
+.
 ## 🚀 Como Executar o Projeto
 
 **Pré-requisitos:**
+* **Git** instalado.
 * **Docker Desktop** instalado e em execução.
 
 **Passos:**
-1.  Clone este repositório.
+1.  **Clone o repositório:** Abra um terminal ou prompt de comando no seu diretório local e execute o seguinte comando para clonar o projeto para sua máquina:
+    ```bash
+    git clone https://github.com/Gustavuu/Venice.Orders.git
+    ```
+    *Como alternativa, utilize a função de clone da sua IDE preferida ou do GitHub Desktop.*
+
 2.  Abra um terminal na pasta raiz do projeto (onde o `docker-compose.yml` está localizado).
-3.  Execute o seguinte comando:
+3.  **Execute o Docker Compose:** Este comando irá construir a imagem da API e subir todos os serviços necessários.
     ```bash
     docker compose up --build
     ```
@@ -73,6 +82,7 @@ O framework **MediatR** foi utilizado como uma implementação do padrão Mediat
 -   **Swagger UI (para testar a API):** `http://localhost:8080/swagger`
 -   **RabbitMQ Management UI (para visualizar a fila):** `http://localhost:15672` (**login:** `guest` / `guest`)
 
+.
 ## 🔑 Como Usar a API
 
 A API é protegida por JWT. Para usar os endpoints de `Pedidos`, siga os passos:
@@ -116,6 +126,24 @@ A API é protegida por JWT. Para usar os endpoints de `Pedidos`, siga os passos:
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
 }
 ```
+
+.
+## 🧪 Testes Unitários
+
+**Para executar os testes, você tem duas opções:**
+
+#### Via Visual Studio:
+1.  Abra a solução do projeto no Visual Studio.
+2.  Abra o "Gerenciador de Testes" no menu `Testar > Gerenciador de Testes` (Test > Test Explorer).
+3.  Clique no botão "Executar Todos os Testes na Exibição".
+
+#### Via Linha de Comando:
+1.  Abra um terminal na pasta raiz da solução (onde o arquivo `.sln` está localizado).
+2.  Execute o seguinte comando:
+    ```bash
+    dotnet test
+    ```
+
 \
 ****Nota:** O HTTPS foi desabilitado na configuração da API para simplificar a execução em ambiente Docker, que não possui os certificados de desenvolvimento locais.*
 
