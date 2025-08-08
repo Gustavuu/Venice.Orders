@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using StackExchange.Redis;
+using System.Reflection;
 using System.Text;
 using Venice.Orders.API.Token;
 using Venice.Orders.Application.Features.Pedidos.Commands;
@@ -40,9 +41,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Insira 'Bearer' [espaço] e o seu token JWT.\n\nExemplo: Bearer eyJhbGciOiJI..."
     });
 
-    // Adiciona um requisito de segurança global.
-    // Isso diz ao Swagger que todos os endpoints (por padrão) precisam do token "Bearer".
-    // É isso que faz o "cadeado" aparecer nos endpoints.
+    // Adiciona requisito de segurança global "Bearer".
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -57,9 +56,13 @@ builder.Services.AddSwaggerGen(options =>
             new string[] {}
         }
     });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
 });
 
-// --- Configuração da Autenticação JWT ---
+// Configuração da Autenticação JWT
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
 
 builder.Services.AddAuthentication(options =>
@@ -69,7 +72,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // Em dev, pode ser false
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -84,36 +87,37 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-// --- Configuração das Conexões com os Bancos de Dados ---
+// Configuração das Conexões com os Bancos de Dados
 var sqlServerConnection = builder.Configuration.GetConnectionString("SqlServer");
 builder.Services.AddDbContext<SqlServerDbContext>(options =>
     options.UseSqlServer(sqlServerConnection, sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5, // Tenta conectar até 5 vezes
-            maxRetryDelay: TimeSpan.FromSeconds(30), // O tempo máximo de espera entre tentativas
+            maxRetryDelay: TimeSpan.FromSeconds(20), // O tempo máximo de espera entre tentativas
             errorNumbersToAdd: null);
     }));
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(builder.Configuration.GetConnectionString("MongoDb")));
-builder.Services.AddScoped<IMongoDatabase>(sp =>
+builder.Services.AddScoped(sp =>
 {
     var client = sp.GetRequiredService<IMongoClient>();
-    return client.GetDatabase("VeniceOrdersItensDB"); // Nome do nosso banco de dados de itens
+    return client.GetDatabase("VeniceOrdersItensDB"); // Nome do banco de dados de itens
 });
 
-// --- Configuração do Cache com Redis ---
+// Configuração do Cache com Redis
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 
-// Registra nosso serviço de cache
+// Registra serviço de cache
 builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
-// --- Configuração das Interfaces e Implementações ---
+// Configuração das Interfaces e Implementações
 builder.Services.AddScoped<IPedidoWriteRepository, PedidoWriteRepository>();
 builder.Services.AddScoped<IPedidoReadRepository, PedidoReadRepository>();
 
+// Registra serviço de fila (RabbitMQ)
 builder.Services.AddSingleton<IMensageriaService>(sp =>
     new RabbitMqService(builder.Configuration.GetConnectionString("RabbitMQ")));
 
@@ -139,7 +143,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<SqlServerDbContext>();
-        context.Database.Migrate(); // Aplica as migrations pendentes
+        context.Database.Migrate(); // Aplica migrations pendentes
     }
     catch (Exception ex)
     {

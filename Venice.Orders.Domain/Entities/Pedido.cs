@@ -35,18 +35,6 @@ namespace Venice.Orders.Domain.Entities
             ValorTotal = Itens.Sum(item => item.Quantidade * item.PrecoUnitario);
         }
 
-        // Métodos para mudar o status
-        public void MarcarComoFaturado()
-        {
-            Status = StatusPedido.Faturado;
-        }
-
-        public void MarcarComoCancelado()
-        {
-            Status = StatusPedido.Cancelado;
-        }
-
-        // O construtor vazio é para uso do Entity Framework.
         protected Pedido() { }
     }
 }

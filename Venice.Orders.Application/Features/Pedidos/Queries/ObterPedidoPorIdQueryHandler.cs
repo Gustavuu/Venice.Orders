@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using Venice.Orders.Application.Features.Pedidos.DTO;
 using Venice.Orders.Application.Interfaces;
 
@@ -9,11 +10,13 @@ namespace Venice.Orders.Application.Features.Pedidos.Queries
         private readonly IPedidoReadRepository _readRepository;
         private readonly ICacheService _cacheService;
         private const string CacheKeyPrefix = "pedido:";
+        private readonly IConfiguration _configuration;
 
-        public ObterPedidoPorIdQueryHandler(IPedidoReadRepository readRepository, ICacheService cacheService)
+        public ObterPedidoPorIdQueryHandler(IPedidoReadRepository readRepository, ICacheService cacheService, IConfiguration configuration)
         {
             _readRepository = readRepository;
             _cacheService = cacheService;
+            _configuration = configuration;
         }
 
         public async Task<PedidoResponseDto?> Handle(ObterPedidoPorIdQuery request, CancellationToken cancellationToken)
@@ -26,17 +29,24 @@ namespace Venice.Orders.Application.Features.Pedidos.Queries
 
             if (cachedPedido is not null)
             {
-                // Cache HIT! Retorna o dado do cache.
+                // Retorna o dado do cache.
                 return cachedPedido;
             }
 
-            // 2. Cache MISS. Busca do repositório (banco de dados)
+            // 2. Cache não encontrado / Busca do repositório
             var pedido = await _readRepository.ObterPorIdAsync(request.Id);
 
             // 3. Se encontrou no banco, salva no cache antes de retornar
             if (pedido is not null)
             {
-                await _cacheService.SetAsync(cacheKey, pedido, TimeSpan.FromMinutes(2)); //Pode ser uma variável de ambiente
+                var expirationMinutesString = _configuration.GetSection("CacheSettings:ExpirationMinutes").Value;
+
+                if (!int.TryParse(expirationMinutesString, out var expirationMinutes))
+                {
+                    expirationMinutes = 2;
+                }
+
+                await _cacheService.SetAsync(cacheKey, pedido, TimeSpan.FromMinutes(expirationMinutes));
             }
 
             return pedido;

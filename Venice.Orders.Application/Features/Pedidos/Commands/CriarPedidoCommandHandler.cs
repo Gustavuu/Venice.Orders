@@ -9,7 +9,6 @@ public class CriarPedidoCommandHandler : IRequestHandler<CriarPedidoCommand, Gui
     private readonly IPedidoWriteRepository _pedidoRepository;
     private readonly IMensageriaService _mensageriaService;
 
-    // As dependências são injetadas via construtor (Dependency Injection)
     public CriarPedidoCommandHandler(IPedidoWriteRepository pedidoRepository, IMensageriaService mensageriaService)
     {
         _pedidoRepository = pedidoRepository;
@@ -18,7 +17,7 @@ public class CriarPedidoCommandHandler : IRequestHandler<CriarPedidoCommand, Gui
 
     public async Task<Guid> Handle(CriarPedidoCommand request, CancellationToken cancellationToken)
     {
-        // 1. Criar a entidade de domínio 'Pedido' a partir dos dados do comando
+        // 1. Cria a entidade de domínio 'Pedido' a partir dos dados do comando
         var pedido = new Pedido(request.ClienteId);
 
         foreach (var itemDto in request.Itens)
@@ -32,12 +31,10 @@ public class CriarPedidoCommandHandler : IRequestHandler<CriarPedidoCommand, Gui
             pedido.AdicionarItem(item);
         }
 
-        // 2. Chamar o repositório para persistir o pedido.
-        // Não sabemos como será salvo (SQL? Mongo?), apenas que o contrato será cumprido.
+        // 2. Chama o repositório para persistir o pedido.
         await _pedidoRepository.Adicionar(pedido);
 
-        // 3. Publicar o evento de 'PedidoCriado' na fila.
-        // Usamos um objeto anônimo por simplicidade, mas poderia ser uma classe de evento dedicada.
+        // 3. Publica o evento de 'PedidoCriado' na fila.
         var eventoPedidoCriado = new { PedidoId = pedido.Id, Valor = pedido.ValorTotal };
         await _mensageriaService.PublicarMensagem(eventoPedidoCriado, "pedidos-criados");
 

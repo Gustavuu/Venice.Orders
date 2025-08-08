@@ -58,6 +58,7 @@ services:
       - ConnectionStrings__MongoDb=mongodb://venice-db-mongo:27017
       - ConnectionStrings__Redis=venice-cache-redis:6379
       - ConnectionStrings__RabbitMQ=amqp://guest:guest@venice-broker-rabbitmq:5672
+      - CacheSettings__ExpirationMinutes=2
     depends_on:
       - venice-db-sql
       - venice-db-mongo

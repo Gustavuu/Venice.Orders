@@ -19,7 +19,6 @@
 
 # Arquivos do Docker
 **/[Dd]ockerfile*
-.dockerignore
 
 # Arquivos de dependências e pacotes
 **/packages/

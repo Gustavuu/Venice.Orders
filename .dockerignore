@@ -1,0 +1,16 @@
+# Arquivos e pastas do .NET
+**/[Bb]in
+**/[Oo]bj
+.vs
+*.user
+*.suo
+
+# Ignorar o nuget.config para evitar problemas de portabilidade
+**/nuget.config
+
+# Arquivos do Git
+.git
+.gitignore
+
+# Arquivos do Docker Compose
+docker-compose.yml

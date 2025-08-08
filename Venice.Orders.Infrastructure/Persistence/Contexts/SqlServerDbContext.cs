@@ -11,7 +11,7 @@ namespace Venice.Orders.Infrastructure.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Requisito: itens do pedido fiquem no MongoDB.
+            // Requisito: itens do pedido ficam no MongoDB.
             // EF IGNORAR a propriedade 'Itens' da entidade Pedido para não criar uma tabela no SQL.
             modelBuilder.Entity<Pedido>().Ignore(p => p.Itens);
         }

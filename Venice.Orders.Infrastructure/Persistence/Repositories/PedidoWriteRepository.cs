@@ -20,15 +20,10 @@ namespace Venice.Orders.Infrastructure.Persistence.Repositories
 
         public async Task Adicionar(Pedido pedido)
         {
-            // Nota sobre transações: Em um cenário de produção real, uma operação que
-            // envolve dois bancos de dados diferentes exigiria um padrão mais complexo
-            // como o "Saga" ou um "Two-Phase Commit" para garantir a consistência.
-            // Para este teste, uma execução sequencial é suficiente para demonstrar a intenção.
-
-            // 1. Adicionar o cabeçalho do pedido ao contexto do SQL Server
+            // 1. Adiciona o cabeçalho do pedido ao contexto do SQL Server
             await _sqlContext.Pedidos.AddAsync(pedido);
 
-            // 2. Salvar a lista de itens em uma coleção no MongoDB
+            // 2. Salva a lista de itens em uma coleção no MongoDB
             if (pedido.Itens.Any())
             {
                 var itensCollection = _mongoDatabase.GetCollection<PedidoItensDocument>("itens_pedido");
@@ -36,7 +31,7 @@ namespace Venice.Orders.Infrastructure.Persistence.Repositories
                 await itensCollection.InsertOneAsync(pedidoItensDocument);
             }
 
-            // 3. Salvar as mudanças no SQL Server
+            // 3. Salva as mudanças no SQL Server
             await _sqlContext.SaveChangesAsync();
         }
     }
@@ -44,7 +39,6 @@ namespace Venice.Orders.Infrastructure.Persistence.Repositories
     // Classe auxiliar para representar o documento que será salvo no MongoDB
     internal class PedidoItensDocument
     {
-        // Este atributo diz ao driver para mapear esta propriedade para o campo '_id' do MongoDB.
         [BsonId]
         public ObjectId Id { get; set; }
 
