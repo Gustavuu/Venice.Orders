@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # SQL Server
+  venice-db-sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: venice-db-sql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Teste@12345 # Senha para o usuário 'sa'. 
+    ports:
+      - "1433:1433" 
+    volumes:
+      - sqlserver-data:/var/opt/mssql 
+
+  # MongoDB
+  venice-db-mongo:
+    image: mongo:latest
+    container_name: venice-db-mongo
+    ports:
+      - "27017:27017" 
+    volumes:
+      - mongodb-data:/data/db
+
+  # Redis
+  venice-cache-redis:
+    image: redis:latest
+    container_name: venice-cache-redis
+    ports:
+      - "6379:6379" 
+
+  # RabbitMQ
+  venice-broker-rabbitmq:
+    image: rabbitmq:3-management # Imagem com a interface de gerenciamento.
+    container_name: venice-broker-rabbitmq
+    ports:
+      - "5672:5672"   # Porta para a aplicação se conectar.
+      - "15672:15672" # Porta para acessarmos a interface web de admin.
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  # API .NET
+  venice-api:
+    container_name: venice-api
+    build:
+      context: .
+      dockerfile: Venice.Orders.API/Dockerfile # Caminho com o nome correto
+    ports:
+      # Mapeamos apenas a porta HTTP. A porta 80 é a padrão para HTTP no contêiner.
+      - "8080:80" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Dizemos ao ASP.NET para escutar apenas na porta HTTP 80.
+      - ASPNETCORE_URLS=http://+:80
+      # As Connection Strings continuam as mesmas
+      - ConnectionStrings__SqlServer=Server=venice-db-sql;Database=VeniceOrdersDB;User Id=sa;Password=Teste@12345;TrustServerCertificate=True;
+      - ConnectionStrings__MongoDb=mongodb://venice-db-mongo:27017
+      - ConnectionStrings__Redis=venice-cache-redis:6379
+      - ConnectionStrings__RabbitMQ=amqp://guest:guest@venice-broker-rabbitmq:5672
+    depends_on:
+      - venice-db-sql
+      - venice-db-mongo
+      - venice-broker-rabbitmq
+
+# Define os 'volumes' que usamos acima, para persistir os dados.
+volumes:
+  sqlserver-data:
+  mongodb-data:

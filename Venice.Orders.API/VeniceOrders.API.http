@@ -1,6 +1,6 @@
 @VeniceOrders.API_HostAddress = http://localhost:5080
 
-GET {{VeniceOrders.API_HostAddress}}/weatherforecast/
+GET {{VeniceOrders.API_HostAddress}}/
 Accept: application/json
 
 ###

@@ -1,9 +1,45 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1 d17.14
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venice.Orders.Application", "Venice.Orders.Application\Venice.Orders.Application.csproj", "{FA416560-D24A-4C29-A502-03047931C46A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venice.Orders.Domain", "Venice.Orders.Domain\Venice.Orders.Domain.csproj", "{6AAC5CCF-7B28-4C32-AF41-58C05418C7A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venice.Orders.Infrastructure", "Venice.Orders.Infrastructure\Venice.Orders.Infrastructure.csproj", "{57B5E66E-9D04-4202-B532-4D4D2EF2CE67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venice.Orders.Tests", "Venice.Orders.Tests\Venice.Orders.Tests.csproj", "{C12CBD27-51CC-43AB-9D17-19CEDC72065E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venice.Orders.API", "Venice.Orders.API\Venice.Orders.API.csproj", "{DD345737-4E4F-42DE-A41C-35A633B065A0}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA416560-D24A-4C29-A502-03047931C46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA416560-D24A-4C29-A502-03047931C46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA416560-D24A-4C29-A502-03047931C46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA416560-D24A-4C29-A502-03047931C46A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AAC5CCF-7B28-4C32-AF41-58C05418C7A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AAC5CCF-7B28-4C32-AF41-58C05418C7A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AAC5CCF-7B28-4C32-AF41-58C05418C7A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AAC5CCF-7B28-4C32-AF41-58C05418C7A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B5E66E-9D04-4202-B532-4D4D2EF2CE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B5E66E-9D04-4202-B532-4D4D2EF2CE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B5E66E-9D04-4202-B532-4D4D2EF2CE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B5E66E-9D04-4202-B532-4D4D2EF2CE67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12CBD27-51CC-43AB-9D17-19CEDC72065E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12CBD27-51CC-43AB-9D17-19CEDC72065E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12CBD27-51CC-43AB-9D17-19CEDC72065E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12CBD27-51CC-43AB-9D17-19CEDC72065E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD345737-4E4F-42DE-A41C-35A633B065A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD345737-4E4F-42DE-A41C-35A633B065A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD345737-4E4F-42DE-A41C-35A633B065A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD345737-4E4F-42DE-A41C-35A633B065A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
