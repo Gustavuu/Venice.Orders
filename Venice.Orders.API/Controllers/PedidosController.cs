@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Venice.Orders.Application.Features.Pedidos.Commands;
 using Venice.Orders.Application.Features.Pedidos.DTO;
@@ -6,6 +7,7 @@ using Venice.Orders.Application.Features.Pedidos.Queries;
 
 namespace Venice.Orders.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PedidosController : ControllerBase
