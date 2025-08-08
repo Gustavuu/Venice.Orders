@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using Venice.Orders.Application.Interfaces;
 using Venice.Orders.Domain.Entities;
 using Venice.Orders.Infrastructure.Persistence.Contexts;
@@ -40,5 +42,20 @@ namespace Venice.Orders.Infrastructure.Persistence.Repositories
     }
 
     // Classe auxiliar para representar o documento que será salvo no MongoDB
-    internal record PedidoItensDocument(Guid PedidoId, List<ItemPedido> Itens);
+    internal class PedidoItensDocument
+    {
+        // Este atributo diz ao driver para mapear esta propriedade para o campo '_id' do MongoDB.
+        [BsonId]
+        public ObjectId Id { get; set; }
+
+        public Guid PedidoId { get; set; }
+        public List<ItemPedido> Itens { get; set; }
+
+        // Construtor para facilitar a criação no repositório de escrita
+        public PedidoItensDocument(Guid pedidoId, List<ItemPedido> itens)
+        {
+            PedidoId = pedidoId;
+            Itens = itens;
+        }
+    }
 }

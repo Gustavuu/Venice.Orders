@@ -45,6 +45,8 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
 
 // --- Configuração das Interfaces e Implementações ---
 builder.Services.AddScoped<IPedidoWriteRepository, PedidoWriteRepository>();
+builder.Services.AddScoped<IPedidoReadRepository, PedidoReadRepository>();
+
 builder.Services.AddSingleton<IMensageriaService>(sp =>
     new RabbitMqService(builder.Configuration.GetConnectionString("RabbitMQ")));
 

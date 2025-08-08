@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Venice.Orders.Application.Features.Pedidos.Commands;
+using Venice.Orders.Application.Features.Pedidos.DTO;
+using Venice.Orders.Application.Features.Pedidos.Queries;
 
 namespace Venice.Orders.API.Controllers
 {
@@ -23,15 +25,18 @@ namespace Venice.Orders.API.Controllers
             var pedidoId = await _mediator.Send(command);
 
             // Retorna um HTTP 201 Created com o link para o novo recurso (que criaremos depois)
-            return CreatedAtAction(nameof(GetPedidoPorId), new { id = pedidoId }, command);
+            return CreatedAtAction(nameof(GetPedidoPorId), new { id = pedidoId }, new { Id = pedidoId });
         }
 
-        // Endpoint placeholder apenas para o CreatedAtAction funcionar.
-        // Vamos implementá-lo de verdade mais tarde.
-        [HttpGet("{id}")]
-        public IActionResult GetPedidoPorId(Guid id)
+        [HttpGet("{id:guid}")] // Adicionamos :guid para garantir que o id seja um Guid válido
+        [ProducesResponseType(typeof(PedidoResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetPedidoPorId(Guid id)
         {
-            return Ok();
+            var query = new ObterPedidoPorIdQuery(id);
+            var pedido = await _mediator.Send(query);
+
+            return pedido is not null ? Ok(pedido) : NotFound();
         }
     }
 }
