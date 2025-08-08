@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using StackExchange.Redis;
 using Venice.Orders.Application.Features.Pedidos.Commands;
 using Venice.Orders.Application.Interfaces;
 using Venice.Orders.Infrastructure.Persistence.Contexts;
@@ -42,6 +43,13 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
     var client = sp.GetRequiredService<IMongoClient>();
     return client.GetDatabase("VeniceOrdersItensDB"); // Nome do nosso banco de dados de itens
 });
+
+// --- Configuração do Cache com Redis ---
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
+
+// Registra nosso serviço de cache
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 // --- Configuração das Interfaces e Implementações ---
 builder.Services.AddScoped<IPedidoWriteRepository, PedidoWriteRepository>();
