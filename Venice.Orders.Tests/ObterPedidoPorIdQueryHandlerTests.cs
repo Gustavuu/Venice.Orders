@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Configuration;
+using Moq;
 using Shouldly;
 using Venice.Orders.Application.Features.Pedidos.DTO;
 using Venice.Orders.Application.Features.Pedidos.Queries;
@@ -10,6 +11,7 @@ namespace Venice.Orders.Tests
     {
         private readonly Mock<IPedidoReadRepository> _mockReadRepo;
         private readonly Mock<ICacheService> _mockCacheService;
+        private readonly Mock<IConfiguration> _mockConfig;
         private readonly ObterPedidoPorIdQueryHandler _obterPedidoPorIdQueryhandler;
 
         public ObterPedidoPorIdQueryHandlerTests()
@@ -17,9 +19,10 @@ namespace Venice.Orders.Tests
             // Mock para as dependências externas
             _mockReadRepo = new Mock<IPedidoReadRepository>();
             _mockCacheService = new Mock<ICacheService>();
+            _mockConfig = new Mock<IConfiguration>();
 
             // Injeta os mocks no handler
-            _obterPedidoPorIdQueryhandler = new ObterPedidoPorIdQueryHandler(_mockReadRepo.Object, _mockCacheService.Object);
+            _obterPedidoPorIdQueryhandler = new ObterPedidoPorIdQueryHandler(_mockReadRepo.Object, _mockCacheService.Object, _mockConfig.Object);
         }
 
         [Fact]
