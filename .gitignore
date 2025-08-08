@@ -1,0 +1,44 @@
+# Arquivos e pastas específicos do usuário
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos gerados pelo Rider
+.idea/
+*.sln.iml
+
+# Arquivos de build
+[Bb]in/
+[Oo]bj/
+[Rr]elease/
+[Dd]ebug/
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos do Docker
+**/[Dd]ockerfile*
+.dockerignore
+
+# Arquivos de dependências e pacotes
+**/packages/
+**/node_modules/
+**/bower_components/
+**/jspm_packages/
+
+# Arquivos de log e de banco de dados temporários
+*.log
+*.tmp
+*.db
+*.mdb
+*.ldf
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de cache do .NET
+.vs/
+project.lock.json
+project.assets.json
