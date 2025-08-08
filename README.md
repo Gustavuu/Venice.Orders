@@ -89,6 +89,7 @@ A API é protegida por JWT. Para usar os endpoints de `Pedidos`, siga os passos:
 4.  No topo da página do Swagger, clique no botão **"Authorize"**.
 5.  Na janela que abrir, digite **`Bearer `** (a palavra Bearer seguida de um espaço) e cole o seu token.
 6.  Agora você está autenticado e pode testar os endpoints `GET` e `POST` de `/api/Pedidos`.
+\
 **Exemplo de request json para `POST /api/Pedidos`:**
 ```json
 {
